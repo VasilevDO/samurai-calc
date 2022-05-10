@@ -1,0 +1,4 @@
+export enum SamuraiActionTypes {
+    BUTTON_ACTION='SAMURAI/BUTTON_ACTION',
+    SET_SCREEN='SAMURAI/SET_SCREEN'
+}

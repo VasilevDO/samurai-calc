@@ -1,6 +1,10 @@
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import Controls from '../Components/Controls.component';
 import Screen from '../Components/Screen.component';
+import controls from '../consts/samuraiCalc.const';
+import {handleButtonClick} from '../redux/samuraiCalc/samuraiCalc.action';
+import {RootState} from '../redux/store';
 
 const Container = styled.div`
     background-color:lightblue;
@@ -22,14 +26,19 @@ const Container = styled.div`
 `;
 
 const SamuraiCalc = () => {
-	const controls = ['C', '√', '%', '/', 7, 8, 9, 'x', 4, 5, 6, '-', 1, 2, 3, '+', '00', 0, ',', '='];
+	const dispatch = useDispatch();
 
-	const screenText = 'kek';
+	const state = useSelector((state:RootState) => state.samuraiCalc);
+	const {screen} = state;
+
+	const handleControlsClick = (val:number|string):void => {
+		dispatch(handleButtonClick(val));
+	};
 
 	return (
 		<Container>
-			<Screen text={screenText}/>
-			<Controls controls={controls}/>
+			<Screen text={screen}/>
+			<Controls controls={controls} clickHandler={handleControlsClick}/>
 		</Container>
 	);
 };

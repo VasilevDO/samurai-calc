@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 interface ButtonProps {
-    text:string|number
+    text:string|number,
+    action:(value:number|string)=>void
 }
 
 const Container = styled.button`
@@ -31,9 +32,9 @@ const Container = styled.button`
 `;
 
 const Button = (props:ButtonProps) => {
-	const {text} = props;
+	const {text, action} = props;
 	return (
-		<Container>
+		<Container onClick={() => action(text)}>
 			{text}
 		</Container>
 	);

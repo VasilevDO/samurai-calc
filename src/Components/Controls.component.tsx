@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import Button from './Button.component';
 
 interface ControlsProps {
-    controls:(string|number)[]
+    controls:(string|number)[],
+    clickHandler:(val:number|string)=>void
 }
 
 const Container = styled.div`
@@ -14,11 +15,15 @@ const Container = styled.div`
 `;
 
 const Controls = (props:ControlsProps) => {
-	const {controls} = props;
+	const {controls, clickHandler} = props;
 
 	return (
 		<Container>
-			{controls.map(u => <Button key={u} text={u}/>)}
+			{controls.map(u => <Button
+				key={u}
+				text={u}
+				action={clickHandler}
+			/>)}
 		</Container>
 	);
 };
