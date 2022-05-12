@@ -9,7 +9,7 @@ interface ControlsProps {
 const Container = styled.div`
     display:grid;
     grid-template-columns:repeat(4,auto);
-    grid-gap: 1em;
+    grid-gap: 16px 20px;
     justify-content: center;
     align-content: center;
 `;

@@ -15,7 +15,7 @@ export class Calc {
 		['(', ')'],
 	]);
 
-	public bracketsCheck = (str:string):boolean => {
+	public bracketsCheck(str:string):boolean {
 		const openers = Array.from(Calc.brackets.keys());
 		const enders = Array.from(Calc.brackets.values());
 
@@ -37,9 +37,9 @@ export class Calc {
 		}
 
 		return !cleanStr;
-	};
+	}
 
-	public calculate = (str:string):number => {
+	public calculate(str:string):number {
 		const openers = Array.from(Calc.brackets.keys());
 
 		let calcStr = str;
@@ -56,9 +56,25 @@ export class Calc {
 		}
 
 		return this.calculateBrackets(calcStr);
-	};
+	}
 
-	private calculateBrackets = (str:string):number => {
+	private calculateBrackets(str:string):number {
+		const checkStrInsert = (leftPart:string, rightPart:string):boolean => {
+			if (leftPart) {
+				if (leftPart[leftPart.length - 1].match(/\d/)) {
+					return false;
+				}
+			}
+
+			if (rightPart) {
+				if (rightPart[0].match(/\d/)) {
+					return false;
+				}
+			}
+
+			return true;
+		};
+
 		let calcStr = str;
 
 		const calcMethodsArr = Array.from(this.methods.values());
@@ -84,24 +100,52 @@ export class Calc {
 					if (method.pos === 'pre') {
 						const a = calcStr.slice(op.index + offset + 1).match(new RegExp(`^${Calc.numberRegExpStr}`));
 						const res = method.fn(Number(a[0]));
-						calcStr = calcStr.slice(offset, op.index + offset) + res + calcStr.slice(op.index + offset + 1 + a[0].length);
+						const leftPart = calcStr.slice(offset, op.index + offset);
+						const rightPart = calcStr.slice(op.index + offset + 1 + a[0].length);
+
+						const isCorrectInsert = checkStrInsert(leftPart, rightPart);
+
+						if (!isCorrectInsert) {
+							return null;
+						}
+
+						calcStr = leftPart + res + rightPart;
 					} else {
 						const a = calcStr.slice(0, op.index + offset).match(new RegExp(`${Calc.numberRegExpStr}$`));
 						const res = method.fn(Number(a[0]));
-						calcStr = calcStr.slice(offset, a.index + offset) + res + calcStr.slice(op.index + 1);
+						const leftPart = calcStr.slice(offset, a.index + offset);
+						const rightPart = calcStr.slice(op.index + 1);
+
+						const isCorrectInsert = checkStrInsert(leftPart, rightPart);
+
+						if (!isCorrectInsert) {
+							return null;
+						}
+
+						calcStr = leftPart + res + rightPart;
 					}
 				} else if (method.fn.length === 2) {
 					const a = calcStr.slice(0, op.index + offset).match(new RegExp(`${Calc.numberRegExpStr}$`));
 					const b = calcStr.slice(op.index + offset + 1).match(new RegExp(`^${Calc.numberRegExpStr}`));
 					const res = method.fn(Number(a[0]), Number(b[0]));
-					calcStr = calcStr.slice(offset, a.index + offset) + res + calcStr.slice(op.index + 1 + offset + b.index + b[0].length);
+
+					const leftPart = calcStr.slice(offset, a.index + offset);
+					const rightPart = calcStr.slice(op.index + 1 + offset + b.index + b[0].length);
+
+					const isCorrectInsert = checkStrInsert(leftPart, rightPart);
+
+					if (!isCorrectInsert) {
+						return null;
+					}
+
+					calcStr = leftPart + res + rightPart;
 				}
 
 				op = (calcStr[0] === '-' ? calcStr.slice(1) : calcStr).match(opsRegExp);
 			}
 		});
 		return Number(calcStr);
-	};
+	}
 }
 
 const calcName = 'Samurai';

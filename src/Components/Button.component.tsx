@@ -6,11 +6,11 @@ interface ButtonProps {
 }
 
 const Container = styled.button`
-    display: table-cell;
-    vertical-align: middle;
+    height:calc(2em + 8px);
+    width:calc(2em + 8px);
 
-    height:2em;
-    width:2em;
+    margin: 0 10px;
+
     border-radius:50%;
 
     cursor:pointer;
@@ -23,7 +23,7 @@ const Container = styled.button`
     background-color: inherit;
 
     &:hover {
-        background-color:rgba(0, 0, 0, 0.1);
+        background-color:rgba(255,255,255,0.12);
     }
 
     &:active {
