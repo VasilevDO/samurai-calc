@@ -9,7 +9,7 @@ class MathMethod {
 		this.priority = priority;
 		this.fn = fn;
 		if (fn.length === 1) {
-			this.pos = pos;
+			this.pos = pos || 'pre';
 		}
 	}
 }

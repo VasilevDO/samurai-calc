@@ -1,26 +1,27 @@
 import styled from 'styled-components';
+import Input from './Input.component';
 
 interface ScreenProps {
-    text:string
+    text:string,
+    changeAction?:(val:string)=>void
 }
 
 const Container = styled.div`
-    border-bottom:2px solid lightgrey;
-    width:100%;
-    font-size:1em;
-    font-weight:inherit;
-    padding: 5px 10px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
 
-    > p {
-        text-align:right;
-    }
+    width: calc(100% - 1em);
+
+    font-size:1em;
+
 `;
 
 const Screen = (props:ScreenProps) => {
-	const {text} = props;
+	const {text, changeAction} = props;
 	return (
 		<Container>
-			<p>{text}</p>
+			<Input value={text} changeAction={changeAction}/>
 		</Container>
 	);
 };

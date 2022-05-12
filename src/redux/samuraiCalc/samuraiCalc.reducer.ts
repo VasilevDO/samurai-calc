@@ -2,6 +2,7 @@ import {SamuraiActionTypes} from './samuraiCalc.type';
 
 const initialState = {
 	screen: '0',
+	decimals: 4,
 };
 
 interface SetScreenAction {

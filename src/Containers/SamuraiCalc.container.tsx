@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import Controls from '../Components/Controls.component';
 import Screen from '../Components/Screen.component';
 import controls from '../consts/samuraiCalc.const';
-import {handleButtonClick} from '../redux/samuraiCalc/samuraiCalc.action';
+import {handleButtonClick, setScreen} from '../redux/samuraiCalc/samuraiCalc.action';
 import {RootState} from '../redux/store';
 
 const Container = styled.div`
     background-color:lightblue;
     
-    display:inline-flex;
+    display: inline-flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
@@ -35,9 +35,13 @@ const SamuraiCalc = () => {
 		dispatch(handleButtonClick(val));
 	};
 
+	const handleScreenChange = (val:string):void => {
+		dispatch(setScreen(val));
+	};
+
 	return (
 		<Container>
-			<Screen text={screen}/>
+			<Screen text={screen} changeAction={handleScreenChange}/>
 			<Controls controls={controls} clickHandler={handleControlsClick}/>
 		</Container>
 	);

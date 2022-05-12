@@ -21,4 +21,6 @@ const controls = [
 	'=',
 ];
 
+export const SAMURAI_CALC_INVALID_INPUT = 'Invalid expression';
+
 export default controls;
