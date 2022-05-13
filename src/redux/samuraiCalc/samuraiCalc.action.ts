@@ -1,14 +1,7 @@
 import {SAMURAI_CALC_INVALID_INPUT} from '../../consts/samuraiCalc.const';
 import CalcModel from '../../models/Calc.model';
-import store from '../store';
-import {SamuraiActionTypes} from './samuraiCalc.type';
-
-export function setScreen(val:string) {
-	return {
-		type: SamuraiActionTypes.SET_SCREEN,
-		payload: val,
-	};
-}
+import store, {AppDispatch} from '../store';
+import samuraiCalcSlice from './SamuraiCalc.slice';
 
 const prepareToCalculate = (str:string) => {
 	let prepStr = str;
@@ -18,7 +11,7 @@ const prepareToCalculate = (str:string) => {
 
 	prepStr = prepStr.replace(/(?<!\d+),\d+/g, match => `0${match}`); // Adding zero to a ,123ish string: ,123 => 0,123
 
-	prepStr = prepStr.replace(/\*/g, 'x'); // Replace * with x so we can handle both symbols to trigger calc method
+	prepStr = prepStr.replace(/[x×]/g, '*'); // Replace x and × with * so we can handle both symbols to trigger calc method
 
 	prepStr = prepStr[0] === '+' ? prepStr.slice(1) : prepStr; // Cutting unnecessary + at the start
 
@@ -29,7 +22,7 @@ const prepareToScreen = (str:string) => str
 	.replace(/\./g, ',') // Switching . back to the , since we are using , as onscreen decimal symbol
 	.replace(/(?<!,(\d+)?)\d+/g, match => match.replace(/^0+/, '') || '0'); // To avoid unnecessary zeros at number start 00123=? 123
 
-const calculate = (str:string, decimals:number) => {
+const calculate = (str:string, decimals:number):string => {
 	try {
 		const isBracketsCorrect = CalcModel.bracketsCheck(str);
 
@@ -60,26 +53,36 @@ const calculate = (str:string, decimals:number) => {
 	}
 };
 
-export const handleButtonClick = (val:string|number) => {
+export const handleButtonClick = (val:string) => (dispatch: AppDispatch) => {
 	const state = store.getState().samuraiCalc;
 
 	if (val === '=') {
-		return setScreen(
-			prepareToScreen(
-				calculate(
-					prepareToCalculate(state.screen), state.decimals),
-			),
+		const result = prepareToScreen(
+			calculate(
+				prepareToCalculate(state.screen), state.decimals),
 		);
+		dispatch(samuraiCalcSlice.actions.historyPush(state.screen));
+		dispatch(samuraiCalcSlice.actions.setScreen(result));
+		return;
 	}
 
 	if (val === 'C') {
-		return setScreen('0');
+		dispatch(samuraiCalcSlice.actions.setScreen('0'));
+		return;
 	}
 
 	if (state.screen === SAMURAI_CALC_INVALID_INPUT) {
-		return setScreen(String(val));
+		dispatch(samuraiCalcSlice.actions.setScreen(String(val)));
+		return;
 	}
 
-	const newScreenValue = (state.screen + val);
-	return setScreen(prepareToScreen(newScreenValue));
+	const newScreenValue = prepareToScreen(state.screen + val);
+	dispatch(samuraiCalcSlice.actions.setScreen(newScreenValue));
+};
+
+export const handleScreenInputChange = (val:string) => (dispatch: AppDispatch) => {
+	console.log(val);
+
+
+	dispatch(samuraiCalcSlice.actions.setScreen(val));
 };

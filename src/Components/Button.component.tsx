@@ -1,11 +1,14 @@
 import styled from 'styled-components';
+import appStyle from '../styles/app.style';
+import buttonStyle from '../styles/button.style';
 
 interface ButtonProps {
     text:string|number,
-    action:(value:number|string)=>void
+    action:(value:number|string)=>void,
+    style?: string
 }
 
-const Container = styled.button`
+const Container = styled.button<{styleScheme:string}>`
     height:calc(2em + 8px);
     width:calc(2em + 8px);
 
@@ -15,26 +18,30 @@ const Container = styled.button`
 
     cursor:pointer;
     font-size:1em;
-    line-height:1em;
+    line-height:inherit;
     font-weight: inherit;
 
-    color:white;
     border:none;
-    background-color: inherit;
-
-    &:hover {
-        background-color:rgba(255,255,255,0.12);
-    }
 
     &:active {
-        border: 1px solid lightgrey;
+        transform: scale(0.95);
     }
+
+    ${props => props.styleScheme}
+
+    @media only screen and (max-width: ${appStyle.screenWidth.med}) {
+        margin: 0;
+    }
+
 `;
 
 const Button = (props:ButtonProps) => {
-	const {text, action} = props;
+	const {text, action, style} = props;
+
+	const styleToImplement = style ? style : buttonStyle.primary;
+
 	return (
-		<Container onClick={() => action(text)}>
+		<Container styleScheme={styleToImplement} onClick={() => action(text)}>
 			{text}
 		</Container>
 	);

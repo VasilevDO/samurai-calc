@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
-import samuraiCalcReducer from './samuraiCalc/samuraiCalc.reducer';
+import SamuraiCalcSlice from './samuraiCalc/SamuraiCalc.slice';
 
 const rootReducer = combineReducers({
-	samuraiCalc: samuraiCalcReducer,
+	samuraiCalc: SamuraiCalcSlice.reducer,
 });
 
 export default rootReducer;

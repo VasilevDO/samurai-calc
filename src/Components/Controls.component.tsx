@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import buttonStyle from '../styles/button.style';
 import Button from './Button.component';
 
 interface ControlsProps {
@@ -23,6 +24,7 @@ const Controls = (props:ControlsProps) => {
 				key={u}
 				text={u}
 				action={clickHandler}
+				style={u === '=' ? buttonStyle.secondary : buttonStyle.primary}
 			/>)}
 		</Container>
 	);
