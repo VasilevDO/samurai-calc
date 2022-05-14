@@ -9,6 +9,9 @@ interface ButtonProps {
 }
 
 const Container = styled.button<{styleScheme:string}>`
+    display:table-cell;
+    vertical-align:middle;    
+
     height:calc(2em + 8px);
     width:calc(2em + 8px);
 
@@ -18,8 +21,10 @@ const Container = styled.button<{styleScheme:string}>`
 
     cursor:pointer;
     font-size:1em;
-    line-height:inherit;
+    line-height:1em;
     font-weight: inherit;
+
+    text-align: center;
 
     border:none;
 

@@ -1,5 +1,6 @@
 import {SAMURAI_CALC_INVALID_INPUT} from '../../consts/samuraiCalc.const';
 import CalcModel from '../../models/Calc.model';
+import {cutNumber} from '../../utils/fn.util';
 import store, {AppDispatch} from '../store';
 import samuraiCalcSlice from './SamuraiCalc.slice';
 
@@ -38,25 +39,25 @@ const calculate = (str:string, decimals:number):string => {
 
 		const fixedRes = res.toFixed(decimals);
 
-		if (Number(fixedRes) === 0 && res !== 0) {// If fixed result equals 0, but actual dont
-			return res.toExponential(decimals)	// Exponential form so we can handle low values
-				.replace(/(?<=\.(\d+)?)0+(?=e)/g, '') // Cutting unnecessary zeroes before e: 1.1000e=>1.1e
-				.replace(/\.(?=e)/g, ''); // Cutting unnecessary . before e: 1.e => 1e
+		let resToCut;
+
+		if (Number(fixedRes) === 0 && res !== 0) {// If fixed result equals 0, but actual dont (for -1 > res < 1 cases)
+			resToCut = Number(res.toExponential());// Exponential form so we can handle low values
+		} else {
+			resToCut = Number(res);
 		}
 
-		return fixedRes
-			.replace(/(?<=\.(\d+)?)0+$/g, '')// Cutting unnecessary zeroes after decimal point: 1.1000 => 1.1
-			.replace(/\.$/g, ''); // Cutting unnecessary decimal point after zeroes cutting: 1. => 1
+		return String(cutNumber(resToCut, decimals));
 	} catch (e) {
 		console.log(e);
 		return SAMURAI_CALC_INVALID_INPUT;
 	}
 };
 
-export const handleButtonClick = (val:string) => (dispatch: AppDispatch) => {
+export const inputUpdate = (val:string) => (dispatch: AppDispatch) => {
 	const state = store.getState().samuraiCalc;
 
-	if (val === '=') {
+	if (val.includes('=')) {
 		const result = prepareToScreen(
 			calculate(
 				prepareToCalculate(state.screen), state.decimals),
@@ -66,23 +67,22 @@ export const handleButtonClick = (val:string) => (dispatch: AppDispatch) => {
 		return;
 	}
 
-	if (val === 'C') {
+	if (val.includes('C')) {
 		dispatch(samuraiCalcSlice.actions.setScreen('0'));
 		return;
 	}
 
 	if (state.screen === SAMURAI_CALC_INVALID_INPUT) {
-		dispatch(samuraiCalcSlice.actions.setScreen(String(val)));
+		const cleanValue = val.replace(new RegExp(SAMURAI_CALC_INVALID_INPUT, 'g'), '');
+		dispatch(samuraiCalcSlice.actions.setScreen(cleanValue));
 		return;
 	}
 
-	const newScreenValue = prepareToScreen(state.screen + val);
-	dispatch(samuraiCalcSlice.actions.setScreen(newScreenValue));
-};
+	const valToDispatch = state.screen === '0' // Filtering initial zero
+		?	val[0] === '0'
+			? val.slice(1)
+			: val
+		: val;
 
-export const handleScreenInputChange = (val:string) => (dispatch: AppDispatch) => {
-	console.log(val);
-
-
-	dispatch(samuraiCalcSlice.actions.setScreen(val));
+	dispatch(samuraiCalcSlice.actions.setScreen(valToDispatch));
 };

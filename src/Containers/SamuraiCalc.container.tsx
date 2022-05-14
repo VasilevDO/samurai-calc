@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, {useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '../hooks/redux.hook';
 import Controls from '../Components/Controls.component';
-import Screen from '../Components/Screen.component';
 import controls from '../consts/samuraiCalc.const';
-import {handleButtonClick, handleScreenInputChange} from '../redux/samuraiCalc/samuraiCalc.action';
+import {inputUpdate} from '../redux/samuraiCalc/samuraiCalc.action';
 import appStyle from '../styles/app.style';
+import History from '../Components/History.component';
+import Input from '../Components/Input.component';
 
 const Wrapper = styled.div`
 	display:inline-block;
@@ -15,7 +16,6 @@ const Wrapper = styled.div`
 	border-radius: 18px;
 
 	@media only screen and (max-width: ${appStyle.screenWidth.med}) {
-		width: 100%;
         padding: 10px;
     }
 `;
@@ -42,12 +42,26 @@ const Container = styled.div`
 	background: linear-gradient(155.23deg, #28518E 0%, #3A77D1 100%);
 	box-shadow: 0px 82px 158px rgba(0, 0, 0, 0.35), 0px 24.7206px 47.6324px rgba(0, 0, 0, 0.228056), 0px 10.2677px 19.7841px rgba(0, 0, 0, 0.175), 0px 3.71362px 7.1555px rgba(0, 0, 0, 0.121944);
 
-    > *:not(:last-child) {
-        margin-bottom: 37px;
+	> hr {
+		width:100%;
+		border: 1px solid #FFFFFF;
+		opacity: 0.35;
+		margin-bottom: 37px;
+	}
+
+	> * {
+		max-width:460px;
+	}
+	
+    > *:first-child {
+        margin-bottom: 28px;
+    }
+
+    > *:nth-child(2) {
+        margin-bottom: 16px;
     }
 
 	@media only screen and (max-width: ${appStyle.screenWidth.med}) {
-        width:100%;
         font-size:20px;
 		line-height: 36px;
 		padding: 20px;
@@ -64,25 +78,36 @@ const SamuraiCalc = () => {
 	const state = useAppSelector(state => state.samuraiCalc);
 	const {screen, history, historyLength} = state;
 
+	const inputRef = useRef<HTMLInputElement>();
+
 	const handleControlsClick = (val:number|string):void => {
-		const valueToDispatch = String(val);
-		dispatch(handleButtonClick(valueToDispatch));
+		const input = inputRef.current;
+		const {value, selectionStart, selectionEnd} = input;
+
+		const valToInsert = String(val);
+
+		const kek = selectionStart + valToInsert.length;
+
+		setTimeout(() => {
+			input.focus();
+			input.setSelectionRange(kek, kek);
+		}, 0);
+
+		const newInputValue = value.slice(0, selectionStart) + valToInsert + value.slice(selectionEnd);
+
+		dispatch(inputUpdate(newInputValue));
 	};
 
-	const handleScreenChange = (val:string):void => {
-		dispatch(handleScreenInputChange(val));
+	const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>):void => {
+		const inputValue = e.target.value;
+		dispatch(inputUpdate(inputValue));
 	};
 
-	const handleScreenKeyDown = (e:React.KeyboardEvent<HTMLInputElement>):void => {
-		if (e.key === '=' || e.key === 'Enter') {
+	const handleInputKeyDown = (e:React.KeyboardEvent<HTMLInputElement>):void => {
+		if (e.key === 'Enter') {
 			e.preventDefault();
-			dispatch(handleButtonClick('='));
-			return;
-		}
-
-		if (e.key === 'C') {
-			e.preventDefault();
-			dispatch(handleButtonClick('C'));
+			const input = inputRef.current;
+			dispatch(inputUpdate(input.value + '='));
 		}
 	};
 
@@ -91,7 +116,9 @@ const SamuraiCalc = () => {
 	return (
 		<Wrapper>
 			<Container>
-				<Screen history={historyToShow} text={screen} changeAction={handleScreenChange} keyDownAction={handleScreenKeyDown}/>
+				<History history={historyToShow}/>
+				<Input value={screen} onChange={handleInputChange} onKeyDown={handleInputKeyDown} ref={inputRef}/>
+				<hr/>
 				<Controls controls={controls} clickHandler={handleControlsClick}/>
 			</Container>
 		</Wrapper>

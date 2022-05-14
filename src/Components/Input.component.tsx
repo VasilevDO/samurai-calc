@@ -3,30 +3,36 @@ import React from 'react';
 
 import appStyle from '../styles/app.style';
 
-interface InputProps {
+interface IInputProps {
     value:string,
-    changeAction:(value:string)=>void,
-    keyDownAction?: (key:React.KeyboardEvent<HTMLInputElement>)=>any
+    onChange?:(e:React.ChangeEvent<HTMLInputElement>)=>void,
+    onKeyDown?: (e:React.KeyboardEvent<HTMLInputElement>)=>void,
 }
 
 const Container = styled.input`
-    width:100%;
+    width: 100%;
     height: 76px;
     color: inherit;
-    font-size: inherit; 
-    line-height: 80px;
-    font-weight:inherit;
     text-align: right;
     background-color: inherit;
     border: none;
 
+    margin-bottom: 18px;
+
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 80px;
+
     &:focus {
         outline: none;
-        box-shadow: 0px 2px 0px 0px rgba(255, 255, 255);
     }
 
     @media only screen and (max-width: ${appStyle.screenWidth.med}) {
         height: 1.5em;
+
+        font-weight: 500;
+        font-size: 28px;
+        line-height: 40px;
         
         >:not(:last-child) {
             margin-bottom: 14px;
@@ -34,18 +40,10 @@ const Container = styled.input`
     }
 `;
 
-const Input = (props:InputProps) => {
-	const {value, changeAction, keyDownAction} = props;
+const Input = React.forwardRef((props:IInputProps, ref:React.Ref<HTMLInputElement>) => (
+	<Container ref={ref} {...props}/>
+));
 
-	const handleKeyDown = keyDownAction
-		? (e:React.KeyboardEvent<HTMLInputElement>) => {
-			keyDownAction(e);
-		}
-		: null;
-
-	return (
-		<Container value={value} onKeyDown={handleKeyDown} onChange={e => changeAction(e.target.value)}/>
-	);
-};
+Input.displayName = 'Input';
 
 export default Input;

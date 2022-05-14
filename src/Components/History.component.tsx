@@ -5,11 +5,11 @@ interface HistoryP {
 }
 
 const Container = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: column-reverse;
     flex-flow: column-reverse;
 
-    width: 100%;
     height: 117px;
 
     font-size: 24px;
@@ -20,6 +20,7 @@ const Container = styled.div`
 
     > p {
         text-align: right;
+        overflow-wrap: anywhere;
     }
 `;
 
