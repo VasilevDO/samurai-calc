@@ -40,9 +40,12 @@ const Container = styled.input`
     }
 `;
 
-const Input = React.forwardRef((props:IInputProps, ref:React.Ref<HTMLInputElement>) => (
-	<Container ref={ref} {...props}/>
-));
+const Input = React.forwardRef((props:IInputProps, ref:React.Ref<HTMLInputElement>) => {
+	const kek = 'w';
+	return (
+		<Container ref={ref} {...props}/>
+	);
+});
 
 Input.displayName = 'Input';
 

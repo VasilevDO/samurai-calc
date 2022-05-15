@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '../hooks/redux.hook';
 import Controls from '../Components/Controls.component';
 import controls from '../consts/samuraiCalc.const';
-import {inputUpdate} from '../redux/samuraiCalc/samuraiCalc.action';
+import {inputUpdate, setScreenType} from '../redux/samuraiCalc/samuraiCalc.action';
 import appStyle from '../styles/app.style';
 import History from '../Components/History.component';
 import Input from '../Components/Input.component';
@@ -76,24 +76,34 @@ const SamuraiCalc = () => {
 	const dispatch = useAppDispatch();
 
 	const state = useAppSelector(state => state.samuraiCalc);
-	const {screen, history, historyLength} = state;
+	const {screen, history, historyLength, isTouchScreen} = state;
+
+	useEffect(() => {
+		const isTouchScreen = Boolean('ontouchstart' in window || navigator.maxTouchPoints);
+		dispatch(setScreenType(isTouchScreen));
+	}, []);
 
 	const inputRef = useRef<HTMLInputElement>();
 
 	const handleControlsClick = (val:number|string):void => {
 		const input = inputRef.current;
+
 		const {value, selectionStart, selectionEnd} = input;
 
 		const valToInsert = String(val);
 
-		const kek = selectionStart + valToInsert.length;
-
-		setTimeout(() => {
-			input.focus();
-			input.setSelectionRange(kek, kek);
-		}, 0);
-
 		const newInputValue = value.slice(0, selectionStart) + valToInsert + value.slice(selectionEnd);
+
+		setTimeout(() => {// To place cursor caret
+			if (isTouchScreen && selectionStart !== newInputValue.length) {
+				const newCaretPos = newInputValue.length;
+				input.setSelectionRange(newCaretPos, newCaretPos);
+			} else if (!isTouchScreen && selectionStart !== value.length) {
+				const caretPos = selectionStart + valToInsert.length;
+				input.focus();
+				input.setSelectionRange(caretPos, caretPos);
+			}
+		}, 0);
 
 		dispatch(inputUpdate(newInputValue));
 	};

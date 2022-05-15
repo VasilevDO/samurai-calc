@@ -86,3 +86,7 @@ export const inputUpdate = (val:string) => (dispatch: AppDispatch) => {
 
 	dispatch(samuraiCalcSlice.actions.setScreen(valToDispatch));
 };
+
+export const setScreenType = (isTouch: boolean) => (dispatch: AppDispatch) => {
+	dispatch(samuraiCalcSlice.actions.setScreenType(isTouch));
+};

@@ -5,6 +5,7 @@ interface ISamuraiCalcState {
 	history:string[];
 	historyLength: number;
 	decimals:number;
+	isTouchScreen: boolean;
 }
 
 const initialState:ISamuraiCalcState = {
@@ -12,6 +13,7 @@ const initialState:ISamuraiCalcState = {
 	history: [],
 	historyLength: 3,
 	decimals: 4,
+	isTouchScreen: false,
 };
 
 const sliceName = 'samuraiCalc';
@@ -25,6 +27,9 @@ const samuraiCalcSlice = createSlice({
 		},
 		historyPush(state, action:PayloadAction<string>) {
 			state.history = [...state.history, action.payload];
+		},
+		setScreenType(state, action:PayloadAction<boolean>) {
+			state.isTouchScreen = action.payload;
 		},
 
 	},
