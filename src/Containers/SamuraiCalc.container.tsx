@@ -86,18 +86,21 @@ const SamuraiCalc = () => {
 	const inputRef = useRef<HTMLInputElement>();
 
 	const handleControlsClick = (val:number|string):void => {
+		const valToInsert = String(val);
+		if (valToInsert.includes('=') || valToInsert.includes('C')) {
+			dispatch(inputUpdate(valToInsert));
+			return;
+		}
+
 		const input = inputRef.current;
 
 		const {value, selectionStart, selectionEnd} = input;
-
-		const valToInsert = String(val);
 
 		const newInputValue = value.slice(0, selectionStart) + valToInsert + value.slice(selectionEnd);
 
 		setTimeout(() => {// To place cursor caret
 			if (isTouchScreen && selectionStart !== newInputValue.length) {
-				const newCaretPos = newInputValue.length;
-				input.setSelectionRange(newCaretPos, newCaretPos);
+				input.setSelectionRange(-1, -1);
 			} else if (!isTouchScreen && selectionStart !== value.length) {
 				const caretPos = selectionStart + valToInsert.length;
 				input.focus();

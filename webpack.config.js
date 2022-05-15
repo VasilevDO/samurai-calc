@@ -7,7 +7,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = (env, argv) => ({
 	entry: ['./src/index.js'],
 	output: {
-		path: path.resolve(__dirname, 'dist'),
+		path: path.resolve(__dirname, 'docs'),
 		filename: '[name].[fullhash].js',
 	},
 	plugins: [
@@ -21,7 +21,7 @@ module.exports = (env, argv) => ({
 				patterns: [
 					{
 						from: path.resolve(__dirname, 'src/assets/favicon.ico'),
-						to: path.resolve(__dirname, 'dist'),
+						to: path.resolve(__dirname, 'docs'),
 					},
 				],
 			}),
