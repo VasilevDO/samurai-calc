@@ -5,8 +5,8 @@ import appStyle from '../styles/app.style';
 
 interface IInputProps {
     value:string,
-    onChange?:(e:React.ChangeEvent<HTMLInputElement>)=>void,
-    onKeyDown?: (e:React.KeyboardEvent<HTMLInputElement>)=>void,
+    onChange?:(_e:React.ChangeEvent<HTMLInputElement>)=>void,
+    onKeyDown?: (_e:React.KeyboardEvent<HTMLInputElement>)=>void,
 }
 
 const Container = styled.input`

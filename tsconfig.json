@@ -9,5 +9,5 @@
       "allowSyntheticDefaultImports": true
     },
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["src", "index.d.ts", "src/redux/root.saga/.ts"]
+  "include": ["src", "index.d.ts"]
 }

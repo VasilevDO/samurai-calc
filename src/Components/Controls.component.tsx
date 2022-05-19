@@ -4,7 +4,7 @@ import Button from './Button.component';
 
 interface ControlsProps {
     controls:(string|number)[],
-    clickHandler:(val:number|string)=>void
+    clickHandler:(_val:number|string)=>void
 }
 
 const Container = styled.div`

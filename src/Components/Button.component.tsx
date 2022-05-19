@@ -4,7 +4,7 @@ import buttonStyle from '../styles/button.style';
 
 interface ButtonProps {
     text:string|number,
-    action:(value:number|string)=>void,
+    action:(_value:number|string)=>void,
     style?: string
 }
 
@@ -42,11 +42,10 @@ const Container = styled.button<{styleScheme:string}>`
 
 const Button = (props:ButtonProps) => {
 	const {text, action, style} = props;
-
 	const styleToImplement = style ? style : buttonStyle.primary;
 
 	return (
-		<Container styleScheme={styleToImplement} onClick={() => action(text)}>
+		<Container styleScheme={styleToImplement} onClick={ () => action(text)}>
 			{text}
 		</Container>
 	);
