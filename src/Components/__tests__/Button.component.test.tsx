@@ -1,5 +1,6 @@
 import {cleanup, fireEvent, render} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import 'jest-styled-components';
 import Button from '../Button.component';
 
 afterEach(cleanup);
@@ -8,7 +9,9 @@ describe('ButtonComponent', () => {
 	const buttonRole = 'button';
 	const buttonText = 'text';
 	const buttonAction = jest.fn();
-	const buttonStyle = '';
+	const buttonStyle = `
+		color: black;
+	`;
 
 	test('should render button with correct text (no style provided)', () => {
 		const {getByRole} = render(<Button text={buttonText} action={buttonAction}/>);
@@ -21,6 +24,7 @@ describe('ButtonComponent', () => {
 		const element = getByRole(buttonRole);
 		expect(element).toBeInTheDocument();
 		expect(element).toHaveTextContent(buttonText);
+		expect(element).toHaveStyle(buttonStyle);
 	});
 	test('should call props action function with text on click', () => {
 		const {getByRole} = render(<Button text={buttonText} action={buttonAction}/>);

@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import React from 'react';
+import {forwardRef, ChangeEvent, KeyboardEvent, Ref} from 'react';
 
 import appStyle from '../styles/app.style';
 
 interface IInputProps {
     value:string,
-    onChange?:(_e:React.ChangeEvent<HTMLInputElement>)=>void,
-    onKeyDown?: (_e:React.KeyboardEvent<HTMLInputElement>)=>void,
+    onChange:(_e:ChangeEvent<HTMLInputElement>)=>void,
+    onKeyDown?: (_e:KeyboardEvent<HTMLInputElement>)=>void,
 }
 
 const Container = styled.input`
@@ -40,8 +40,8 @@ const Container = styled.input`
     }
 `;
 
-const Input = React.forwardRef((props:IInputProps, ref:React.Ref<HTMLInputElement>) => (
-	<Container ref={ref} {...props}/>
+const Input = forwardRef((props:IInputProps, ref:Ref<HTMLInputElement>) => (
+	<Container data-testid="input" ref={ref} {...props}/>
 ));
 
 Input.displayName = 'Input';

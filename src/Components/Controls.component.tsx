@@ -19,7 +19,7 @@ const Controls = (props:ControlsProps) => {
 	const {controls, clickHandler} = props;
 
 	return (
-		<Container>
+		<Container data-testid="controls">
 			{controls.map(u => <Button
 				key={u}
 				text={u}

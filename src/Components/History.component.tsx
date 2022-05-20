@@ -27,7 +27,7 @@ const Container = styled.div`
 const History = (props:HistoryP) => {
 	const {history} = props;
 	return (
-		<Container>
+		<Container data-testid="history">
 			{[...history].reverse().map((u, i) => (
 				<p key={`${i}:${u}`}>{u}</p>
 			))}
