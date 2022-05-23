@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ButtonComponent should render button with correct text (no style provided) 1`] = `
-.c0 {
+exports[`ControlsComponent should render a correct element 1`] = `
+.c1 {
   display: table-cell;
   vertical-align: middle;
   height: calc(2em + 8px);
@@ -18,33 +18,17 @@ exports[`ButtonComponent should render button with correct text (no style provid
   background-color: inherit;
 }
 
-.c0:active {
+.c1:active {
   -webkit-transform: scale(0.95);
   -ms-transform: scale(0.95);
   transform: scale(0.95);
 }
 
-.c0:hover {
+.c1:hover {
   background-color: rgba(255,255,255,0.12);
 }
 
-@media only screen and (max-width:768px) {
-  .c0 {
-    margin: 0;
-  }
-}
-
-<div>
-  <button
-    class="c0"
-  >
-    text
-  </button>
-</div>
-`;
-
-exports[`ButtonComponent should render button with correct text (style provided) 1`] = `
-.c0 {
+.c2 {
   display: table-cell;
   vertical-align: middle;
   height: calc(2em + 8px);
@@ -57,26 +41,70 @@ exports[`ButtonComponent should render button with correct text (style provided)
   font-weight: inherit;
   text-align: center;
   border: none;
-  color: black;
+  color: #2B589A;
+  background-color: #FFFFFF;
 }
 
-.c0:active {
+.c2:active {
   -webkit-transform: scale(0.95);
   -ms-transform: scale(0.95);
   transform: scale(0.95);
 }
 
+.c2:hover {
+  background-color: rgba(255,255,255,0.7);
+}
+
+.c0 {
+  display: grid;
+  grid-template-columns: repeat(4,auto);
+  grid-gap: 16px 20px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: center;
+  -ms-flex-line-pack: center;
+  align-content: center;
+}
+
 @media only screen and (max-width:768px) {
-  .c0 {
+  .c1 {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width:768px) {
+  .c2 {
     margin: 0;
   }
 }
 
 <div>
-  <button
+  <div
     class="c0"
+    data-testid="controls"
   >
-    text
-  </button>
+    <button
+      class="c1"
+    >
+      1
+    </button>
+    <button
+      class="c1"
+    >
+      2
+    </button>
+    <button
+      class="c1"
+    >
+      3
+    </button>
+    <button
+      class="c2"
+    >
+      =
+    </button>
+  </div>
 </div>
 `;

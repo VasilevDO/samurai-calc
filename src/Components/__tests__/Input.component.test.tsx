@@ -9,10 +9,11 @@ describe('InputComponent', () => {
 	const changeAction = jest.fn();
 
 	test('should render a correct element', () => {
-		const {getByTestId} = render(<Input value={initValue} onChange={changeAction}/>);
+		const {container, getByTestId} = render(<Input value={initValue} onChange={changeAction}/>);
 		const element = getByTestId(testId);
 		expect(element).toBeInTheDocument();
 		expect(element).toHaveValue(initValue);
+		expect(container).toMatchSnapshot();
 	});
 });
 

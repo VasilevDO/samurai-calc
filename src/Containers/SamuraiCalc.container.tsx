@@ -77,6 +77,7 @@ const SamuraiCalc = () => {
 
 	const state = useAppSelector(state => state.samuraiCalc);
 	const {screen, history, historyLength, isTouchScreen} = state;
+	console.log('STATE', state);
 
 	useEffect(() => {
 		const isTouchScreen = Boolean('ontouchstart' in window || navigator.maxTouchPoints);

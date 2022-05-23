@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HistoryComponent should render correct element 1`] = `
+.c0 {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column-reverse;
+  -ms-flex-direction: column-reverse;
+  flex-direction: column-reverse;
+  -webkit-flex-flow: column-reverse;
+  -ms-flex-flow: column-reverse;
+  flex-flow: column-reverse;
+  height: 117px;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.c0 > p {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+<div>
+  <div
+    class="c0"
+    data-testid="history"
+  >
+    <p>
+      3
+    </p>
+    <p>
+      2
+    </p>
+    <p>
+      1
+    </p>
+  </div>
+</div>
+`;
