@@ -3,6 +3,12 @@ import '@testing-library/jest-dom/extend-expect';
 import 'jest-styled-components';
 import SamuraiCalc from '../SamuraiCalc.container';
 import * as reduxHooks from '../../hooks/redux.hook';
+import React from 'react';
+
+jest.mock('../../Components/History.component', (props:any) => {
+	const kekw = 'lulc';
+	return (<div>Hello World</div>);
+});
 
 const useDispatchSpy = jest.spyOn(reduxHooks, 'useAppDispatch');
 const mockDispatchFn = jest.fn();

@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-interface ISamuraiCalcState {
+export interface ISamuraiCalcState {
 	screen:string;
 	history:string[];
 	historyLength: number;
@@ -8,7 +8,7 @@ interface ISamuraiCalcState {
 	isTouchScreen: boolean;
 }
 
-const initialState:ISamuraiCalcState = {
+export const initialState:ISamuraiCalcState = {
 	screen: '0',
 	history: [],
 	historyLength: 3,

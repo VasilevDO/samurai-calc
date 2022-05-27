@@ -39,6 +39,13 @@ export class Calc {
 		return !cleanStr;
 	}
 
+	public filterUnnecessary(str:string):string {
+		return str
+			.replace(/^\+/, '')
+			.replace(/[+-]{2,}/g, match => match.split('')
+				.reduce((a, u) => u === '+' ? a + 2 : a + 1, 0) % 2 ? '-' : '+');// Converting repeating + and - into one char: +-++=>-
+	}
+
 	public calculate(str:string):number {
 		const openers = Array.from(Calc.brackets.keys());
 
@@ -75,7 +82,7 @@ export class Calc {
 			return true;
 		};
 
-		let calcStr = str;
+		let calcStr = this.filterUnnecessary(str);
 
 		const calcMethodsArr = Array.from(this.methods.values());
 		const prioritiesArr = calcMethodsArr.reduce((a, u) => {

@@ -7,6 +7,7 @@ module.exports = {
 		'src/**/*.ts',
 		'!src/*.js',
 		'!src/*.tsx',
+		'!src/**/*.type.ts',
 		'!src/models/**',
 		'!**/__mocks__/**',
 		'!**/__tests__/**',

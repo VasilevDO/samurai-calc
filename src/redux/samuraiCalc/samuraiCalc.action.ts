@@ -1,11 +1,13 @@
 import {SAMURAI_CALC_INVALID_INPUT} from '../../consts/samuraiCalc.const';
 import CalcModel from '../../models/Calc.model';
 import {cutNumber} from '../../utils/fn.util';
-import store, {AppDispatch} from '../store';
+import {AppDispatch} from '../store';
 import samuraiCalcSlice from './SamuraiCalc.slice';
 
 const prepareToCalculate = (str:string) => {
 	let prepStr = str;
+
+	prepStr = prepStr.replace(/=/g, ''); // To filter resolve symbol
 
 	prepStr = prepStr.replace(/[+-]{2,}/g, match => match.split('')
 		.reduce((a, u) => u === '+' ? a + 2 : a + 1, 0) % 2 ? '-' : '+');// Converting repeating + and - into one char: +-++=>-
@@ -48,21 +50,17 @@ const calculate = (str:string, decimals:number):string => {
 		}
 
 		return String(cutNumber(resToCut, decimals));
-	} catch (e) {
-		console.log(e);
+	} catch {
 		return SAMURAI_CALC_INVALID_INPUT;
 	}
 };
 
-export const inputUpdate = (val:string) => (dispatch: AppDispatch) => {
-	const state = store.getState().samuraiCalc;
-
+export const inputUpdate = (val:string, decimals: number) => (dispatch: AppDispatch) => {
 	if (val.includes('=')) {
-		const result = prepareToScreen(
-			calculate(
-				prepareToCalculate(state.screen), state.decimals),
-		);
-		dispatch(samuraiCalcSlice.actions.historyPush(state.screen));
+		const preparedValue = prepareToCalculate(val);
+		const result = prepareToScreen(calculate(preparedValue, decimals));
+		const valToStore = val.replace(/=/g, '');
+		dispatch(samuraiCalcSlice.actions.historyPush(valToStore));
 		dispatch(samuraiCalcSlice.actions.setScreen(result));
 		return;
 	}
@@ -72,19 +70,8 @@ export const inputUpdate = (val:string) => (dispatch: AppDispatch) => {
 		return;
 	}
 
-	if (state.screen === SAMURAI_CALC_INVALID_INPUT) {
-		const cleanValue = val.replace(new RegExp(SAMURAI_CALC_INVALID_INPUT, 'g'), '');
-		dispatch(samuraiCalcSlice.actions.setScreen(cleanValue));
-		return;
-	}
-
-	const valToDispatch = state.screen === '0' // Filtering initial zero
-		?	val[0] === '0'
-			? val.slice(1)
-			: val
-		: val;
-
-	dispatch(samuraiCalcSlice.actions.setScreen(valToDispatch));
+	const valToShow = prepareToScreen(val);
+	dispatch(samuraiCalcSlice.actions.setScreen(valToShow));
 };
 
 export const setScreenType = (isTouch: boolean) => (dispatch: AppDispatch) => {

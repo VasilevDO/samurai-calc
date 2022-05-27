@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import React, {useEffect, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '../hooks/redux.hook';
 import Controls from '../Components/Controls.component';
-import controls from '../consts/samuraiCalc.const';
+import controls, {SAMURAI_CALC_INVALID_INPUT} from '../consts/samuraiCalc.const';
 import {inputUpdate, setScreenType} from '../redux/samuraiCalc/samuraiCalc.action';
 import appStyle from '../styles/app.style';
 import History from '../Components/History.component';
@@ -89,7 +89,7 @@ const SamuraiCalc = () => {
 	const handleControlsClick = (val:number|string):void => {
 		const valToInsert = String(val);
 		if (valToInsert.includes('=') || valToInsert.includes('C')) {
-			dispatch(inputUpdate(valToInsert));
+			// Dispatch(inputUpdate(valToInsert));
 			return;
 		}
 
@@ -109,19 +109,24 @@ const SamuraiCalc = () => {
 			}
 		}, 0);
 
-		dispatch(inputUpdate(newInputValue));
+		// Dispatch(inputUpdate(newInputValue));
 	};
 
 	const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>):void => {
 		const inputValue = e.target.value;
-		dispatch(inputUpdate(inputValue));
+		if (state.screen === SAMURAI_CALC_INVALID_INPUT) {
+			dispatch(inputUpdate('0', state.decimals));
+			return;
+		}
+
+		dispatch(inputUpdate(inputValue, state.decimals));
 	};
 
 	const handleInputKeyDown = (e:React.KeyboardEvent<HTMLInputElement>):void => {
 		if (e.key === 'Enter') {
 			e.preventDefault();
 			const input = inputRef.current;
-			dispatch(inputUpdate(input.value + '='));
+			dispatch(inputUpdate(input.value + '=', state.decimals));
 		}
 	};
 
